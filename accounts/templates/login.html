@@ -1,0 +1,99 @@
+<!-- ベーステンプレートを適用する-->
+{% extends 'base.html' %} 
+
+
+{% block contents %}
+<!-- 静的ファイルのURLを生成するstaticタグをロードする -->
+{% load static %}
+
+<style>
+  body{
+    background-image: url( '{% static 'img/sorwhite.png' %}' );
+    background-size: 100%;
+    background-repeat: contain;
+  }
+</style>
+
+  <div class="container">
+    <div class="row py-lg-5"> 
+      <div class="col-lg-3 col-md-8 mx-auto text-align: center;">
+  <body style="margin-top:70px">      
+    <main class="form-signin text-center">
+      <!-- ユーザー名とパスワードが一致しない場合のメッセージ -->
+      {% if form.errors %}
+        <p style="color: red">ユーザー名とパスワードが一致しません。</p>
+      {% endif %}
+      <!-- ログインのフォームを配置 -->
+      <form style="margin: 2em auto; width: 300px;" method="post">
+        {% csrf_token %}
+        <!-- Bootstrapのロゴを表示 -->
+        <!-- 「static/img/bootstrap-logo.svg」の読み込み -->
+        <!-- ログイン画面のアイコンをカメラに変更-->
+        <p>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="40"
+             height="40"
+             fill="none"
+             stroke="currentColor"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             stroke-width="2"
+             aria-hidden="true"
+             class="me-2"
+             viewBox="0 0 24 24">
+             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+             <circle cx="12" cy="13" r="4"/></svg></style>
+        <h1 class="h3 mb-3 fw-normal">サインイン</h1>
+        <!--
+        <div class="form-floating">～</div>の2つのブロックを削除して
+        以下に書き換え
+        -->
+        <!-- Usernameのラベル(非表示) -->
+        <label for="Username" class="visually-hidden">
+          User name</label>
+        <!-- usernameの<input>タグを出力-->
+        <!-- name属性の値はLoginViewで定義されているフィールド名username -->
+        <input type="text"
+               name="username"
+               id="id_username"
+               maxlength="150"
+               autocapitalize="none"
+               autocomplete="username"
+               class="form-control"
+               placeholder="ユーザー名"
+               required autofocus>
+        <!-- Passwordのラベル(非表示) -->
+        <label for="Password" class="visually-hidden">
+          Password</label>
+        <!-- passwordの<input>タグを出力-->
+        <!-- name属性の値はLoginViewで定義されているフィールド名password -->
+        <input type="password"
+               name="password"
+               id="id_password"
+               autocomplete="current-password"
+               class="form-control"
+               placeholder="パスワード"
+               required autofocus>
+        
+        <!-- <div class="checkbox mb-3">~</div>を削除 -->    
+
+        <!-- <button>～</button>を書き換えてログインボタンを配置 -->
+            <input class="w-100 btn btn-lg btn-primary"
+                   type="submit"
+                   value="ログイン">
+        
+        <!-- パスワードリセットページのリンクテキスト -->
+        <br><br>
+        <p><a href="{% url 'password_reset' %}">パスワードを忘れましたか?</a><p>
+        <p><a href="{% url 'accounts:signup' %}">ユーザー登録がまだの方はこちら</a><p>
+        <!-- ログイン直後のリダイレクト先(トップページ)のURLパターンを設定 -->
+        <input type="hidden"
+               name="next"
+               value="{% url 'photo:index' %}">
+      </form>
+    </main>   
+  </body>
+</div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% load static %}
+<style>
+  body{
+    background-image: url( '{% static 'img/sorwhite.png' %}' );
+    background-size: 100%;
+    background-repeat: contain;
+  }
+</style>
+
+<div class="album py-5 bg-light">
+  <!-- Bootstrapのグリッドシステムを適用 -->
+
+  {% if request.resolver_match.view_name == 'photo:user_list' %}
+
+    {% for record in object_list|slice:":1"  %}
+  
+      <h4 style="margin-left: 6rem; margin-bottom: 2rem;">
+      絞り込み：ユーザー ≫ {{record.user.username}}
+      </h4>
+ 
+    {% endfor %}
+
+  {% endif %}
+
+
+
+  {% if request.resolver_match.view_name == 'photo:photos_cat' %}
+  
+    {% for record in object_list|slice:":1"  %}
+  
+      <h4 style="margin-left: 6rem; margin-bottom: 2rem;">
+      絞り込み：カテゴリ ≫ {{record.category.title}}
+      </h4>
+
+    {% endfor %}
+
+  {% endif %}
+
+  <div class="container">
+    <!-- 行要素を配置 -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      <!-- レコードが格納されたobject_listから
+           レコードを1行ずつrecordに取り出す-->
+      {% for record in object_list %}
+      <!-- 列要素を配置 -->
+      <div class="col">
+        <div class="card shadow-sm">
+          <!-- svgタグをimgに変更
+               src属性を追加して1枚目のイメージのURLを設定 -->
+          <img src="{{ record.image1.url }}"
+               class="bd-placeholder-img card-img-top"
+               width="100%" height="225"
+               xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-label="Placeholder: Thumbnail"
+               preserveAspectRatio="xMidYMid slice"
+               focusable="false"
+               onclick="location.href='{% url 'photo:photo_detail' record.pk %}'">
+               <title>Placeholder</title>
+               <rect width="100%" height="100%" fill="#55595c"/>
+               <!-- <text>~</text>を削除 -->
+          </img>
+          <!-- タイトルとボタンを出力するブロック -->
+          <div class="card-body">
+            <p class="card-text"><font size="5"><!--フォントサイズ変更-->
+              <!-- titleフィールドを出力 -->
+              <!-- <b>で文字を太くした -->
+              <b>{{record.title}}</b></font>
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- 詳細ページを表示するボタン -->
+                <button type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        onclick="location.href='{% url 'photo:photo_detail' record.pk %}'">
+                        詳細</button>
+                <!-- カテゴリを表示するボタン -->
+                <button type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        onclick="location.href='{% url 'photo:photos_cat' category=record.category.id %}'">
+                        {{record.category.title}}</button>
+              </div>
+              <!-- 投稿したユーザー名を出力-->
+              <a href="{% url 'photo:user_list' user=record.user.id %}">
+                <small class="text-muted">
+                  {{record.user.username}}</small>
+              </a>
+            </div>
+          </div>
+        </div>
+      <!-- 列要素ここまで -->
+      </div>
+      <!-- forブロック終了 -->
+      {% endfor %}
+    <!-- 行要素ここまで -->
+    </div>
+  <!-- グリッドシステムここまで -->
+  </div>
+</div>
